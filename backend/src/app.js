@@ -30,9 +30,29 @@ const {
 } = process.env;
 
 // ================== MIDDLEWARE ==================
+const allowedOrigins = [
+  FRONTEND_URL,
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "https://localhost:5173",
+  "https://127.0.0.1:5173",
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: [FRONTEND_URL, "http://localhost:5173", "http://127.0.0.1:5173"],
+    origin(origin, callback) {
+      // Allow non-browser clients or same-origin requests
+      if (!origin) return callback(null, true);
+
+      const isAllowedExact = allowedOrigins.includes(origin);
+      const isAllowedVercel = /^https:\/\/[-a-z0-9]+\.vercel\.app$/i.test(origin);
+
+      if (isAllowedExact || isAllowedVercel) {
+        return callback(null, true);
+      }
+
+      return callback(null, false);
+    },
     credentials: true,
   })
 );
