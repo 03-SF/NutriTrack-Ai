@@ -106,8 +106,14 @@ function checkAndUpdateGoalStreak(user) {
 }
 
 function createOauthClient(redirectUri = null) {
+  // Prefer explicit redirect URI env var in deployed environments (e.g. Vercel)
+  const explicitRedirect =
+    process.env.GOOGLE_OAUTH_REDIRECT ||
+    process.env.GOOGLE_REDIRECT_URI ||
+    process.env.GOOGLE_OAUTH_REDIRECT_URI;
+
   const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT || 5000}`;
-  redirectUri = redirectUri || `${baseUrl}/api/auth/google/callback`;
+  redirectUri = redirectUri || explicitRedirect || `${baseUrl}/api/auth/google/callback`;
   
   return new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,

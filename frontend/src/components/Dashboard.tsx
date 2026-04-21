@@ -31,8 +31,14 @@ function setJwt(token: string) {
 }
 
 // API base
-const API_BASE =
-  (import.meta.env.VITE_BACKEND_URL as string) || "http://localhost:5000";
+const API_BASE = (() => {
+  const envBase = (import.meta.env.VITE_BACKEND_URL as string) || "";
+  if (envBase) return envBase;
+
+  const host = window.location.hostname;
+  const isLocal = host === "localhost" || host === "127.0.0.1";
+  return isLocal ? "http://localhost:5000" : ""; // same-origin in production
+})();
 
 // Types
 type UserInfo = {
