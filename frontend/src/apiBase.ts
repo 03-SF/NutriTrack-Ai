@@ -15,6 +15,20 @@ export function getApiBase(): string {
       return "";
     }
 
+    // Avoid mixed-content in production: https site cannot fetch http API.
+    if (!isLocalHost && window.location.protocol === "https:") {
+      try {
+        const parsed = new URL(trimmed);
+        if (parsed.protocol === "http:") {
+          parsed.protocol = "https:";
+          return parsed.toString().replace(/\/+$/, "");
+        }
+      } catch {
+        // If it's not a full URL, treat it as relative/same-origin.
+        return trimmed.startsWith("/") ? trimmed : "";
+      }
+    }
+
     return trimmed;
   }
 
