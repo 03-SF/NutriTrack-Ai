@@ -4,6 +4,7 @@ import NutritionLog from "./NutritionLog";
 import FitnessLog from "./FitnessLog";
 import Settings from "./Settings";
 import ExerciseModal from "./ExerciseModal";
+import { API_BASE } from "../apiBase";
 
 const DAILY_GOAL_DEFAULT = 2200;
 
@@ -29,16 +30,6 @@ function getJwt(): string | null {
 function setJwt(token: string) {
   localStorage.setItem("jwt", token);
 }
-
-// API base
-const API_BASE = (() => {
-  const envBase = (import.meta.env.VITE_BACKEND_URL as string) || "";
-  if (envBase) return envBase;
-
-  const host = window.location.hostname;
-  const isLocal = host === "localhost" || host === "127.0.0.1";
-  return isLocal ? "http://localhost:5000" : ""; // same-origin in production
-})();
 
 // Types
 type UserInfo = {

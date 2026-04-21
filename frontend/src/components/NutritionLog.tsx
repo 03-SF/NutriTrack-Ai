@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-
-const API_BASE = (import.meta.env.VITE_BACKEND_URL as string) || "http://localhost:5000";
+import { API_BASE } from "../apiBase";
 
 type FoodEntry = {
   _id?: string;

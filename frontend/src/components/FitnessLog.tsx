@@ -11,8 +11,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-
-const API_BASE = (import.meta.env.VITE_BACKEND_URL as string) || "http://localhost:5000";
+import { API_BASE } from "../apiBase";
 
 type DayData = {
   date: string;
