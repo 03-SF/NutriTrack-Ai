@@ -1,23 +1,8 @@
 {
   "version": 2,
-  "framework": "react",
+  "framework": "vite",
   "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
   "public": true,
-  "regions": ["sfo1"],
-  "env": [
-    "MONGO_URI",
-    "SESSION_SECRET",
-    "FRONTEND_URL",
-    "GOOGLE_CLIENT_ID",
-    "GOOGLE_CLIENT_SECRET",
-    "GOOGLE_REDIRECT_URI",
-    "JWT_SECRET",
-    "BASE_URL"
-  ],
-  "functions": {
-    "api/index.js": {
-      "runtime": "nodejs20.x"
-    }
-  }
+  "regions": ["sfo1"]
 }
