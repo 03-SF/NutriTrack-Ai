@@ -32,17 +32,27 @@ router.get("/today", requireAuth(), async (req, res, next) => {
       });
     }
 
-    // Get TODAY only - Use UTC to avoid timezone issues
+    // Get timezone offset from frontend (in minutes, as returned by getTimezoneOffset())
+    // E.g., 420 for PDT (UTC-7), -330 for IST (UTC+5:30)
+    const tzOffsetMinutes = parseInt(req.query.tz || '0');
+    console.log(`🌍 Timezone offset: ${tzOffsetMinutes} minutes (${tzOffsetMinutes / 60} hours)`);
+
+    // Calculate TODAY in the user's local timezone
     const now = new Date();
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
+    const utcNowMs = now.getTime();
+
+    // Create dates in local timezone and convert to UTC timestamps
+    // Start of today in local time: YYYY-MM-DD 00:00:00
+    const todayDateInLocal = new Date(utcNowMs - (tzOffsetMinutes * 60 * 1000));
+    const localStartMs = new Date(todayDateInLocal.getUTCFullYear(), todayDateInLocal.getUTCMonth(), todayDateInLocal.getUTCDate()).getTime();
     
-    const start = todayStart.getTime();
-    const end = now.getTime();
+    // Convert back to UTC by adding the offset
+    const start = localStartMs + (tzOffsetMinutes * 60 * 1000);
+    const end = utcNowMs;
     
-    console.log(`📊 Fetching TODAY's data (UTC):`);
-    console.log(`   Start: ${new Date(start).toISOString()}`);
-    console.log(`   End: ${new Date(end).toISOString()}`);
+    console.log(`📊 Fetching TODAY's data (user timezone):`);
+    console.log(`   Start (local): ${new Date(start).toISOString()}`);
+    console.log(`   End (now): ${new Date(end).toISOString()}`);
     
     // Use DIRECT API to fetch steps
     const directResult = await fetchDirectSteps(user, start, end);

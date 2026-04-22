@@ -1,6 +1,7 @@
 // Settings.tsx
 import * as React from "react";
 import axios from "axios";
+import { API_BASE } from "../apiBase";
 
 interface SettingsProps {
   onClose: () => void;
@@ -44,7 +45,7 @@ export default function Settings({ onClose }: SettingsProps) {
           return;
         }
 
-        const response = await axios.get("http://localhost:5000/api/profile", {
+        const response = await axios.get(`${API_BASE}/api/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -122,7 +123,7 @@ export default function Settings({ onClose }: SettingsProps) {
       }
 
       const response = await axios.post(
-        "http://localhost:5000/api/profile/setup",
+        `${API_BASE}/api/profile/setup`,
         {
           age,
           gender: formData.gender,

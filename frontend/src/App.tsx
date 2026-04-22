@@ -9,6 +9,7 @@ import Signup from "./components/Signup";
 import WelcomeScreen from "./components/WelcomeScreen";
 import ProfileSetup from "./components/ProfileSetup";
 import axios from "axios";
+import { API_BASE } from "./apiBase";
 
 type Page = 'landing' | 'login' | 'signup' | 'welcome' | 'profile-setup' | 'dashboard';
 
@@ -55,7 +56,7 @@ export default function App() {
       }
 
       try {
-        const response = await axios.get("http://localhost:5000/api/profile", {
+        const response = await axios.get(`${API_BASE}/api/profile`, {
           headers: { Authorization: `Bearer ${jwt}` },
         });
         

@@ -186,15 +186,30 @@ export default function Dashboard({ openModal, onModalClose, onSyncTimeUpdate }:
       setLoadingFitness(true);
       setFitnessError(null);
       console.log('🔄 Fetching fitness data...', { jwt: jwt.substring(0, 20) + '...' });
-      const resp = await fetch(`${API_BASE}/api/fitness/today`, {
+      
+      // Get user's timezone offset (in minutes)
+      const tzOffset = new Date().getTimezoneOffset();
+      console.log(`🌍 Sending timezone offset: ${tzOffset} minutes`);
+      
+      const resp = await fetch(`${API_BASE}/api/fitness/today?tz=${tzOffset}`, {
         headers: {
           Authorization: `Bearer ${jwt}`,
         },
       });
       if (!resp.ok) {
-        const t = await resp.text();
-        console.error('❌ API Error:', resp.status, t);
-        throw new Error(`API error: ${resp.status} ${t}`);
+        let errorMsg = `API error: ${resp.status}`;
+        try {
+          const errorBody = await resp.json();
+          if (errorBody.message) {
+            errorMsg = errorBody.message;
+          }
+        } catch {
+          // If response is not JSON, fall back to text
+          const t = await resp.text();
+          errorMsg = t || errorMsg;
+        }
+        console.error('❌ API Error:', resp.status, errorMsg);
+        throw new Error(errorMsg);
       }
       const data: FitnessToday = await resp.json();
       console.log('✅ Fitness data loaded:', data);

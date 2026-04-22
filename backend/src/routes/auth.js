@@ -302,6 +302,8 @@ router.get("/google/callback", async (req, res, next) => {
     const client = createOauthClient();
     const { tokens } = await client.getToken(code);
     console.log('✅ Tokens obtained from Google');
+    console.log('🧾 Granted scopes:', tokens?.scope || '(none reported)');
+    console.log('🔐 Has refresh_token:', Boolean(tokens?.refresh_token));
 
     client.setCredentials(tokens);
 
@@ -326,7 +328,13 @@ router.get("/google/callback", async (req, res, next) => {
       });
     } else {
       console.log('✅ Existing user found, updating tokens');
-      user.google.tokens = tokens;
+      // Google often doesn't resend refresh_token; preserve the existing one.
+      const existing = user.google?.tokens?.toObject?.() || user.google?.tokens || {};
+      user.google.tokens = {
+        ...existing,
+        ...tokens,
+        refresh_token: tokens?.refresh_token || existing.refresh_token,
+      };
       user.google.fitConnected = true;
     }
 
