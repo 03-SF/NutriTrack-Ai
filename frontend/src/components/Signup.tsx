@@ -48,7 +48,7 @@ export default function Signup({ onNavigate, onSignupSuccess }: SignupProps) {
         console.log('✅ Signup successful, navigating to profile setup');
         onSignupSuccess(data.token, true); // Pass true to indicate new signup
       } else {
-        setError(data.error || 'Signup failed. Please try again.');
+        setError(data.message || data.error || 'Signup failed. Please try again.');
       }
     } catch (e) {
       console.error('❌ Signup error:', e);

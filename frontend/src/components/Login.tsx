@@ -35,7 +35,7 @@ export default function Login({ onNavigate, onLoginSuccess }: LoginProps) {
         console.log('✅ Login successful, navigating to dashboard');
         onLoginSuccess(data.token);
       } else {
-        setError(data.error || 'Login failed. Please check your credentials.');
+        setError(data.message || data.error || 'Login failed. Please check your credentials.');
       }
     } catch (e) {
       console.error('❌ Login error:', e);
