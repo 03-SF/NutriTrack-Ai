@@ -1,3 +1,5 @@
 "node_modules/"  
 ".env" 
 .vercel
+backend/tokens.json
+backend/.env
