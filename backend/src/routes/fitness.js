@@ -41,18 +41,34 @@ router.get("/today", requireAuth(), async (req, res, next) => {
     const now = new Date();
     const utcNowMs = now.getTime();
 
-    // Create dates in local timezone and convert to UTC timestamps
-    // Start of today in local time: YYYY-MM-DD 00:00:00
-    const todayDateInLocal = new Date(utcNowMs - (tzOffsetMinutes * 60 * 1000));
-    const localStartMs = new Date(todayDateInLocal.getUTCFullYear(), todayDateInLocal.getUTCMonth(), todayDateInLocal.getUTCDate()).getTime();
+    // Get current time in user's local timezone
+    const localNowMs = utcNowMs - (tzOffsetMinutes * 60 * 1000);
+    const localNow = new Date(localNowMs);
+
+    // Start of TODAY in local time (00:00:00 local)
+    const startOfDayLocalMs = new Date(
+      localNow.getUTCFullYear(),
+      localNow.getUTCMonth(),
+      localNow.getUTCDate(),
+      0, 0, 0, 0
+    ).getTime();
     
-    // Convert back to UTC by adding the offset
-    const start = localStartMs + (tzOffsetMinutes * 60 * 1000);
-    const end = utcNowMs;
+    // End of TODAY in local time (23:59:59 local)
+    const endOfDayLocalMs = new Date(
+      localNow.getUTCFullYear(),
+      localNow.getUTCMonth(),
+      localNow.getUTCDate(),
+      23, 59, 59, 999
+    ).getTime();
+    
+    // Convert to UTC milliseconds
+    const start = startOfDayLocalMs - (tzOffsetMinutes * 60 * 1000);
+    const end = endOfDayLocalMs - (tzOffsetMinutes * 60 * 1000);
     
     console.log(`📊 Fetching TODAY's data (user timezone):`);
-    console.log(`   Start (local): ${new Date(start).toISOString()}`);
-    console.log(`   End (now): ${new Date(end).toISOString()}`);
+    console.log(`   Start (UTC): ${new Date(start).toISOString()}`);
+    console.log(`   End (UTC): ${new Date(end).toISOString()}`);
+    console.log(`   Local date: ${localNow.getUTCFullYear()}-${String(localNow.getUTCMonth() + 1).padStart(2, '0')}-${String(localNow.getUTCDate()).padStart(2, '0')}`);
     
     // Use DIRECT API to fetch steps
     const directResult = await fetchDirectSteps(user, start, end);

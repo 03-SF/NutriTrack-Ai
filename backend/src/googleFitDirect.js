@@ -82,23 +82,48 @@ async function fetchDirectSteps(user, startMs, endMs) {
 
       let totalSteps = 0;
 
-      // Use the aggregate API WITHOUT specifying dataSourceId
-      // This automatically aggregates from ALL available sources
-      // Version 2: Force fresh aggregate from all sources
-      console.log('\n🔄 Using Aggregate API to sum all step sources...');
+      // FIRST: List all data sources to identify the primary device
+      console.log('\n📋 Listing available data sources...');
+      let primaryDataSourceId = null;
+      try {
+        const dataSources = await fitness.users.dataSources.list({ userId: 'me' });
+        const stepDataSources = dataSources.data.dataSource?.filter(ds => 
+          ds.dataType?.name?.includes('step') 
+        ) || [];
+        
+        console.log(`Found ${stepDataSources.length} step data source(s):`);
+        stepDataSources.forEach((ds, i) => {
+          const device = ds.device?.model || ds.device?.type || 'Unknown';
+          console.log(`  ${i + 1}. ${device} - ${ds.dataStreamId}`);
+        });
+        
+        if (stepDataSources.length > 0) {
+          primaryDataSourceId = stepDataSources[0].dataStreamId;
+          const device = stepDataSources[0].device?.model || stepDataSources[0].device?.type || 'primary device';
+          console.log(`\n✅ Using PRIMARY source: ${device}`);
+          if (stepDataSources.length > 1) {
+            console.log(`⚠️ Ignoring ${stepDataSources.length - 1} other source(s) to avoid double-counting`);
+          }
+        }
+      } catch (listErr) {
+        console.log(`⚠️ Failed to list data sources: ${listErr.message}`);
+      }
+
+      // Use the aggregate API with the primary data source only
+      console.log('\n🔄 Using Aggregate API to fetch steps from primary source...');
       
       try {
         const aggregateRequest = {
           aggregateBy: [{
-            dataTypeName: 'com.google.step_count.delta'
-            // NOTE: Not specifying dataSourceId - Google Fit will aggregate ALL sources
+            dataTypeName: 'com.google.step_count.delta',
+            ...(primaryDataSourceId && { dataSourceId: primaryDataSourceId })
           }],
           bucketByTime: { durationMillis: endMs - startMs },
           startTimeMillis: startMs,
           endTimeMillis: endMs
         };
 
-        console.log('📡 Sending aggregate request (all sources)...');
+        console.log(`📡 Sending aggregate request${primaryDataSourceId ? ' (primary source only)' : ' (all sources)'}...`);
         const response = await fitness.users.dataset.aggregate({
           userId: 'me',
           requestBody: aggregateRequest
@@ -147,14 +172,24 @@ async function fetchDirectSteps(user, startMs, endMs) {
             ds.dataType?.name?.includes('step') 
           ) || [];
           
-          console.log(`Found ${stepDataSources.length} step data source(s)`);
+          console.log(`Found ${stepDataSources.length} step data source(s):`);
+          stepDataSources.forEach((ds, i) => {
+            console.log(`  ${i + 1}. ${ds.device?.model || 'Unknown'} - ${ds.dataStreamId}`);
+          });
           
-          for (const ds of stepDataSources) {
+          // Only use the first (primary) data source to avoid double-counting from multiple devices
+          if (stepDataSources.length > 0) {
+            const primarySource = stepDataSources[0];
+            console.log(`\n✅ Using PRIMARY source: ${primarySource.device?.model || 'Unknown Device'}`);
+            if (stepDataSources.length > 1) {
+              console.log(`⚠️ Ignoring ${stepDataSources.length - 1} other source(s) to avoid double-counting`);
+            }
+            
             try {
-              console.log(`\n  🔍 Querying: ${ds.dataType?.name}`);
+              console.log(`\n  🔍 Querying: ${primarySource.dataType?.name} from ${primarySource.device?.model || 'primary device'}`);
               const req = {
                 aggregateBy: [{
-                  dataTypeName: ds.dataType?.name
+                  dataTypeName: primarySource.dataType?.name
                 }],
                 bucketByTime: { durationMillis: endMs - startMs },
                 startTimeMillis: startMs,
@@ -189,7 +224,8 @@ async function fetchDirectSteps(user, startMs, endMs) {
       }
 
       console.log(`\n📊 FINAL TOTAL STEPS: ${totalSteps}`);
-      return { steps: totalSteps, raw: {} };
+      console.log(`🔍 Step breakdown - Total: ${totalSteps}, Start: ${new Date(startMs).toLocaleString()}, End: ${new Date(endMs).toLocaleString()}`);
+      return { steps: totalSteps, raw: { startMs, endMs, totalSteps } };
 
     } catch (err) {
       lastError = err;

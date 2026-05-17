@@ -546,468 +546,419 @@ export default function Dashboard({ openModal, onModalClose, onSyncTimeUpdate }:
 
   return (
     <>
-      {/* Welcome Message */}
+      {/* Action Buttons Section - Card Style */}
+      <section className="page-row">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+          <div
+            onClick={() => setShowNutritionLog(true)}
+            style={{ 
+              padding: '24px',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              borderRadius: '16px',
+              color: 'white',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
+            }}
+          >
+            <div style={{ fontSize: '32px', marginBottom: '12px' }}>🍽️</div>
+            <div style={{ fontSize: '18px', fontWeight: 600, marginBottom: '6px' }}>Log Nutrition</div>
+            <div style={{ fontSize: '14px', opacity: 0.95 }}>Track your meals, snacks and macros for today</div>
+          </div>
+          <div
+            onClick={() => setShowFitnessLog(true)}
+            style={{ 
+              padding: '24px',
+              background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+              borderRadius: '16px',
+              color: 'white',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
+            }}
+          >
+            <div style={{ fontSize: '32px', marginBottom: '12px' }}>💪</div>
+            <div style={{ fontSize: '18px', fontWeight: 600, marginBottom: '6px' }}>Log Fitness</div>
+            <div style={{ fontSize: '14px', opacity: 0.95 }}>Record your workouts and active minutes</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Welcome Message - Full Width Card */}
       {userInfo && (
-        <div style={{ marginBottom: '1rem', padding: '1.5rem', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', borderRadius: '12px', color: 'white' }}>
-          <h2 style={{ margin: '0 0 0.5rem 0', fontSize: '1.5rem' }}>
-            {isFirstTime ? `Welcome to NutriTrack, ${userInfo.name}! 🎉` : `Welcome back, ${userInfo.name}! 👋`}
-          </h2>
-          <p style={{ margin: 0, opacity: 0.9 }}>
-            {isFirstTime 
-              ? `Your daily calorie goal is ${dailyGoal} kcal. Let's start tracking your nutrition and fitness!` 
-              : 'Track your progress and stay healthy'
-            }
-          </p>
-          {isFirstTime && (
-            <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(255, 255, 255, 0.15)', borderRadius: '8px', fontSize: '0.875rem' }}>
-              <strong>🚀 Quick Start Tips:</strong>
-              <ul style={{ margin: '0.5rem 0 0 1.25rem', paddingLeft: 0 }}>
-                <li>Start by logging your first meal using the Nutrition Log</li>
-                <li>Connect Google Fit to track your daily steps and activities</li>
-                <li>Check back daily to see your progress and trends</li>
-              </ul>
-            </div>
-          )}
+        <div style={{ 
+          marginBottom: '1.5rem', 
+          padding: '24px', 
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+          borderRadius: '16px', 
+          color: 'white',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <div>
+            <h2 style={{ margin: '0 0 8px 0', fontSize: '1.5rem' }}>
+              Welcome back, {userInfo.name}! 👋
+            </h2>
+            <p style={{ margin: 0, opacity: 0.95, fontSize: '14px' }}>
+              You're on a {loginStreak}-day streak. Today's goal is to maintain your net calorie balance while focusing on heart health.
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: '12px', flexDirection: 'column', alignItems: 'flex-end' }}>
+            <button
+              onClick={() => setShowNutritionLog(true)}
+              style={{
+                padding: '8px 16px',
+                background: 'rgba(255,255,255,0.25)',
+                border: '1px solid rgba(255,255,255,0.5)',
+                color: 'white',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 600,
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255,255,255,0.35)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(255,255,255,0.25)';
+              }}
+            >
+              Log Morning Meal
+            </button>
+            <button
+              onClick={() => setShowSettings(true)}
+              style={{
+                padding: 0,
+                background: 'none',
+                border: 'none',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: '13px',
+                textDecoration: 'underline',
+              }}
+            >
+              View Schedule
+            </button>
+          </div>
         </div>
       )}
       
-      {/* Row: Calorie + Streak + Tip */}
-      <section className="page-row grid">
-        {/* Daily Calorie Balance */}
+      {/* Your Daily Balance Card */}
+      <section className="page-row">
         <div className="card">
           <div className="card-header">
             <div>
-              <div className="card-title">Daily Calorie Balance</div>
-              <div className="card-subtitle">
-                Stay aligned with your goal and keep your intake balanced.
-              </div>
+              <div className="card-title">Your Daily Balance</div>
+              <div className="card-subtitle">Consumed vs burned calories</div>
             </div>
-            <span className="badge-soft">
-              Goal: <span id="dailyGoalLabel">{dailyGoal.toLocaleString()} kcal</span>
-            </span>
           </div>
 
-          <div className="calorie-card">
-            {/* Circular Gauge */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.8fr', gap: '40px', padding: '20px 0', alignItems: 'start' }}>
+            {/* Left: Circular Gauge - Calories Left */}
             <div
               className="gauge-wrapper"
-              style={{ ["--progress" as string]: gaugeProgress }}
+              style={{ 
+                ["--progress" as string]: Math.min((caloriesConsumed / dailyGoal) * 100, 100),
+                width: '200px',
+                height: '200px',
+                margin: '0 auto'
+              }}
             >
-              <div className="gauge-inner">
-                <div className="gauge-label">Remaining</div>
-                <div className="gauge-value" id="remainingKcal">
-                  {caloriesRemaining.toLocaleString()}
+              <div className="gauge-inner" style={{ width: '154px', height: '154px' }}>
+                <div className="gauge-label">KCAL LEFT</div>
+                <div className="gauge-value" style={{ color: '#667eea' }}>
+                  {caloriesRemaining}
                 </div>
-                <div className="gauge-caption">kcal left today</div>
               </div>
               <div className="gauge-dot" />
             </div>
 
-            {/* Calorie Details */}
-            <div className="calorie-details">
-              <div className="calorie-rows">
-                <div className="cal-row">
-                  <div className="cal-label">🍽️ Consumed</div>
-                  <div className="cal-value" id="calConsumed">
-                    {caloriesConsumed.toLocaleString()}
-                  </div>
-                  <div className="cal-unit">kcal</div>
-                </div>
-
-                <div className="cal-row" style={{ 
-                  borderTop: '1px solid rgba(0,0,0,0.05)', 
-                  paddingTop: '8px',
-                  marginTop: '8px'
+            {/* Right: Stats + Progress Bars */}
+            <div>
+              {/* Three Stat Boxes */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
+                <div style={{ 
+                  background: '#f3f4f6', 
+                  padding: '16px', 
+                  borderRadius: '12px',
+                  textAlign: 'center'
                 }}>
-                  <div className="cal-label">📊 Net Calories</div>
-                  <div className="cal-value" style={{ 
-                    color: caloriesNet > dailyGoal ? '#e74c3c' : '#2ecc71' 
-                  }}>
-                    {caloriesNet.toLocaleString()}
-                  </div>
-                  <div className="cal-unit">kcal</div>
+                  <div style={{ fontSize: '11px', fontWeight: 600, color: '#999', marginBottom: '6px', textTransform: 'uppercase' }}>CONSUMED</div>
+                  <div style={{ fontSize: '24px', fontWeight: 700, color: '#667eea' }}>{caloriesConsumed}</div>
+                  <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>kcal</div>
                 </div>
 
-                {caloriesNet > dailyGoal && (
-                  <div className="cal-row" style={{ 
-                    background: 'rgba(231, 76, 60, 0.05)',
-                    padding: '8px',
-                    borderRadius: '6px',
-                    marginTop: '8px'
-                  }}>
-                    <div className="cal-label" style={{ fontSize: '0.9em' }}>
-                      💪 Need to burn
-                    </div>
-                    <div className="cal-value" style={{ color: '#e74c3c', fontWeight: 'bold' }}>
-                      {(caloriesNet - dailyGoal).toLocaleString()}
-                    </div>
-                    <div className="cal-unit" style={{ fontSize: '0.9em' }}>more kcal</div>
-                  </div>
-                )}
-
-                {caloriesNet <= dailyGoal && (
-                  <div className="cal-row">
-                    <div className="cal-label">⚡ Can consume</div>
-                    <div className="cal-value" id="calRemainingRow" style={{ color: '#2ecc71' }}>
-                      {caloriesRemaining.toLocaleString()}
-                    </div>
-                    <div className="cal-unit">more kcal</div>
-                  </div>
-                )}
-              </div>
-
-              <div className="cal-progress-label">
-                <span>Daily goal completion</span>
-                <span>
-                  <strong id="dailyCompletion">{completionPercent}%</strong> of target
-                </span>
-              </div>
-
-              <div className="progress-bar">
-                <div
-                  className="progress-fill"
-                  id="dailyProgressFill"
-                  style={{ width: `${Math.min(completionPercent, 100)}%` }}
-                />
-              </div>
-
-              {/* Fitness Activity Summary */}
-              <div className="fitness-summary">
-                <div className="fitness-summary-header">
-                  <span className="card-title">Fitness Activity (Today)</span>
-                  <button
-                    className="btn-refresh"
-                    disabled={loadingFitness}
-                    onClick={fetchFitnessToday}
-                    title="Refresh from Google Fit"
-                  >
-                    {loadingFitness ? (
-                      <>
-                        <span className="refresh-spinner">🔄</span> Refreshing...
-                      </>
-                    ) : (
-                      <>
-                        🔄 Refresh Data
-                      </>
-                    )}
-                  </button>
+                <div style={{ 
+                  background: '#f3f4f6', 
+                  padding: '16px', 
+                  borderRadius: '12px',
+                  textAlign: 'center'
+                }}>
+                  <div style={{ fontSize: '11px', fontWeight: 600, color: '#999', marginBottom: '6px', textTransform: 'uppercase' }}>NET<br/>CALORIES</div>
+                  <div style={{ fontSize: '24px', fontWeight: 700, color: '#16a34a' }}>{caloriesNet}</div>
+                  <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>kcal</div>
                 </div>
-                
-                {/* Google Fit Connection Status */}
-                {!jwt ? (
-                  <div className="alert-info" style={{ marginBottom: '1rem' }}>
-                    <p style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>⚠️ Not Connected</p>
-                    <p style={{ marginBottom: '0.5rem' }}>Connect your Google Fit account to sync data from your phone</p>
-                    <button
-                      className="btn-primary"
-                      onClick={async () => {
-                        try {
-                          console.log('🔄 Fetching OAuth URL...');
-                          const resp = await fetch(`${API_BASE}/api/auth/google/url`);
-                          if (!resp.ok) {
-                            throw new Error('Backend server not responding');
-                          }
-                          const { url } = await resp.json();
-                          console.log('✅ Redirecting to Google OAuth...');
-                          window.location.href = url;
-                        } catch (e) {
-                          console.error('❌ Failed to get OAuth URL:', e);
-                          alert('Error: Cannot connect to backend server. Make sure it is running on port 5000.');
-                        }
+
+                <div style={{ 
+                  background: '#f3f4f6', 
+                  padding: '16px', 
+                  borderRadius: '12px',
+                  textAlign: 'center'
+                }}>
+                  <div style={{ fontSize: '11px', fontWeight: 600, color: '#999', marginBottom: '6px', textTransform: 'uppercase' }}>GOAL</div>
+                  <div style={{ fontSize: '24px', fontWeight: 700, color: '#667eea' }}>{dailyGoal.toLocaleString()}</div>
+                  <div style={{ fontSize: '11px', color: '#999', marginTop: '2px' }}>kcal</div>
+                </div>
+              </div>
+
+              {/* Progress Bars */}
+              <div>
+                {/* Protein */}
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                    <div style={{ fontSize: '12px', fontWeight: 600, color: '#666', textTransform: 'uppercase' }}>Protein</div>
+                    <div style={{ fontSize: '12px', fontWeight: 600, color: '#666' }}>{proteinConsumed}G / 120G</div>
+                  </div>
+                  <div style={{ height: '6px', background: '#e5e7eb', borderRadius: '3px', overflow: 'hidden' }}>
+                    <div 
+                      style={{ 
+                        height: '100%', 
+                        background: '#667eea',
+                        width: `${Math.min((proteinConsumed / 120) * 100, 100)}%`,
+                        transition: 'width 0.3s ease'
                       }}
-                    >
-                      🔗 Connect Google Fit
-                    </button>
+                    />
                   </div>
-                ) : (
-                  <div className="fitness-status-message" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span className="status-dot"></span>
-                      <span>Connected - Syncing data from Google Fit</span>
-                    </div>
-                    <button
-                      className="btn-refresh"
-                      onClick={async () => {
-                        // Clear JWT and reconnect
-                        localStorage.removeItem('jwt');
-                        setJwtState(null);
-                        alert('🔄 Disconnected. Click "Connect Google Fit" to reconnect.');
-                        window.location.reload();
-                      }}
-                    >
-                      🔄 Reconnect
-                    </button>
-                  </div>
-                )}
-                
-                {fitnessError && (
-                  <div className="alert-error">{fitnessError}</div>
-                )}
-                
-                <div className="fitness-summary-body">
-                  <div className="fitness-metric-card">
-                    <div className="metric-icon">👟</div>
-                    <div className="metric-content">
-                      <div className="metric-label">Steps</div>
-                      <div className="metric-value">{steps.toLocaleString()}</div>
-                    </div>
-                  </div>
-                  <div className="fitness-metric-card">
-                    <div className="metric-icon">🔥</div>
-                    <div className="metric-content">
-                      <div className="metric-label">Calories Burned</div>
-                      <div className="metric-value">{caloriesBurned.toLocaleString()} <span className="metric-unit">kcal</span></div>
-                      {(googleFitCalories > 0 || manualWorkoutCalories > 0) && (
-                        <div style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: '0.25rem' }}>
-                          {googleFitCalories > 0 && `Google Fit: ${googleFitCalories}`}
-                          {googleFitCalories > 0 && manualWorkoutCalories > 0 && ' | '}
-                          {manualWorkoutCalories > 0 && `Manual: ${manualWorkoutCalories}`}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="fitness-metric-card">
-                    <div className="metric-icon">📍</div>
-                    <div className="metric-content">
-                      <div className="metric-label">Distance</div>
-                      <div className="metric-value">{distance} <span className="metric-unit">km</span></div>
-                    </div>
-                  </div>
-                  <div className="fitness-metric-card">
-                    <div className="metric-icon">❤️</div>
-                    <div className="metric-content">
-                      <div className="metric-label">Heart Points</div>
-                      <div className="metric-value">{Math.round(heartPoints)}</div>
-                    </div>
-                  </div>
-                  {fitness?.parsed?.activities && fitness.parsed.activities.length > 0 && (
-                    <>
-                      <div className="fitness-row" style={{ marginTop: '1rem', fontWeight: 'bold' }}>
-                        <span>🏃 Activities</span>
-                        <span>{fitness.parsed.activities.length}</span>
-                      </div>
-                      <ul className="workout-list">
-                        {fitness.parsed.activities.slice(0, 3).map((activity: any, idx: number) => (
-                          <li key={idx}>
-                            {activity.name} — {Math.round(activity.duration / 60000)} min
-                          </li>
-                        ))}
-                      </ul>
-                    </>
-                  )}
                 </div>
-                
-                {!jwt && (
-                  <div style={{ marginTop: '0.75rem', fontSize: '0.85rem', color: '#888' }}>
-                    ⚠️ Not connected - Click button above to connect
+
+                {/* Carbs */}
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                    <div style={{ fontSize: '12px', fontWeight: 600, color: '#666', textTransform: 'uppercase' }}>Carbs</div>
+                    <div style={{ fontSize: '12px', fontWeight: 600, color: '#666' }}>{carbsConsumed}G / 250G</div>
                   </div>
-                )}
+                  <div style={{ height: '6px', background: '#e5e7eb', borderRadius: '3px', overflow: 'hidden' }}>
+                    <div 
+                      style={{ 
+                        height: '100%', 
+                        background: '#ff9800',
+                        width: `${Math.min((carbsConsumed / 250) * 100, 100)}%`,
+                        transition: 'width 0.3s ease'
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Streak Widget */}
-        <div className="grid-2">
-          {/* Streak Widget */}
-          <div className="streak-card">
-            <div className="streak-header">
-              <div className="streak-main">
-                <div className="streak-icon" aria-hidden="true">
-                  🔥
-                </div>
-                <div className="streak-text">
-                  <span className="streak-label">Login Streak</span>
-                  <span className="streak-value">
-                    <span id="streakDays">{loginStreak}</span> {loginStreak === 1 ? 'day' : 'days'}
-                  </span>
-                  <span className="streak-meta">
-                    {longestLoginStreak > loginStreak 
-                      ? `Longest: ${longestLoginStreak} days` 
-                      : loginStreak > 0 
-                        ? 'Personal best! 🎉' 
-                        : 'Start your streak today!'}
-                  </span>
-                </div>
+      {/* Metrics Grid - 4 Column */}
+      <section className="page-row">
+        <div className="card">
+          <div className="card-header">
+            <div>
+              <div className="card-title">Today's Activity</div>
+            </div>
+            <button
+              className="btn-refresh"
+              disabled={loadingFitness}
+              onClick={fetchFitnessToday}
+              title="Refresh from Google Fit"
+            >
+              {loadingFitness ? (
+                <>
+                  <span className="refresh-spinner">🔄</span> Refreshing...
+                </>
+              ) : (
+                <>
+                  🔄 Refresh Data
+                </>
+              )}
+            </button>
+          </div>
+          
+          <div className="grid-4">
+            <div className="fitness-metric-card">
+              <div style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '12px',
+                background: '#667eea',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontSize: '24px',
+                marginBottom: '10px'
+              }}>
+                ⬆️
               </div>
-              <div className="streak-tag">
-                {loginStreak >= 7 
-                  ? 'Amazing consistency!' 
-                  : loginStreak >= 3 
-                    ? 'Keep it going!' 
-                    : 'Build your habit'}
+              <div className="metric-content">
+                <div className="metric-label">Steps</div>
+                <div style={{ fontSize: '18px', fontWeight: 700, marginTop: '4px' }}>{steps.toLocaleString()}</div>
               </div>
             </div>
-            
-            {/* Goal Completion Streak Section */}
-            <div className="streak-divider" />
-            <div className="streak-footer">
-              <div className="streak-secondary">
-                <span className="streak-secondary-icon">🎯</span>
-                <div>
-                  <div className="streak-secondary-label">Goal Completion Streak</div>
-                  <div className="streak-secondary-value">
-                    {goalStreak} {goalStreak === 1 ? 'day' : 'days'}
-                  </div>
-                  <div className="streak-secondary-meta">
-                    {goalStreak > 0 
-                      ? `Meeting your ${dailyGoal} cal goal daily!` 
-                      : 'Complete your daily calorie goal to start'}
-                  </div>
-                </div>
+
+            <div className="fitness-metric-card">
+              <div style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '12px',
+                background: '#ff9800',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontSize: '24px',
+                marginBottom: '10px'
+              }}>
+                🔥
+              </div>
+              <div className="metric-content">
+                <div className="metric-label">Burned</div>
+                <div style={{ fontSize: '18px', fontWeight: 700, marginTop: '4px' }}>{caloriesBurned.toLocaleString()} <span style={{ fontSize: '12px', color: '#666' }}>kcal</span></div>
               </div>
             </div>
-            
-            <div className="streak-bg-band" />
+
+            <div className="fitness-metric-card">
+              <div style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '12px',
+                background: '#2196F3',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontSize: '24px',
+                marginBottom: '10px'
+              }}>
+                📍
+              </div>
+              <div className="metric-content">
+                <div className="metric-label">Distance</div>
+                <div style={{ fontSize: '18px', fontWeight: 700, marginTop: '4px' }}>{distance} <span style={{ fontSize: '12px', color: '#666' }}>km</span></div>
+              </div>
+            </div>
+
+            <div className="fitness-metric-card">
+              <div style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '12px',
+                background: '#ff6b9d',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontSize: '24px',
+                marginBottom: '10px'
+              }}>
+                ❤️
+              </div>
+              <div className="metric-content">
+                <div className="metric-label">Heart Points</div>
+                <div style={{ fontSize: '18px', fontWeight: 700, marginTop: '4px' }}>{heartPoints.toLocaleString()}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Charts */}
+
+      {/* Exercise Suggestions Card */}
+      <section className="page-row">
+        <div className="card">
+          <div className="card-header">
+            <div>
+              <div className="card-title">🎯 Today's Exercise Suggestion</div>
+            </div>
           </div>
 
-          {/* Exercise Recommendations Card */}
-          <div className="tip-card" style={{ display: 'flex', flexDirection: 'column', maxWidth: '420px' }}>
-            <div className="tip-header" style={{ marginBottom: '12px', flexShrink: 0 }}>
-              <div className="tip-title" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                <span className="tip-icon">🎯</span>
-                Today's Exercise Suggestion
-              </div>
+          {loadingRecs ? (
+            <div style={{ textAlign: 'center', padding: '2rem' }}>
+              <p style={{ color: 'var(--text-muted)' }}>⏳ Analyzing your data...</p>
             </div>
-
-            {loadingRecs ? (
-              <div className="tip-content">
-                <p className="tip-message" style={{ textAlign: 'center', padding: '20px 0' }}>
-                  ⏳ Analyzing your data...
-                </p>
-              </div>
-            ) : !exerciseRecs ? (
-              <div className="tip-content">
-                <p className="tip-message" style={{ textAlign: 'center', opacity: 0.7 }}>
-                  Complete your profile and log meals to get recommendations!
-                </p>
-              </div>
-            ) : (
-              <div className="tip-content" style={{ paddingTop: '0' }}>
-                {/* Calorie Status */}
+          ) : !exerciseRecs ? (
+            <div style={{ textAlign: 'center', padding: '2rem' }}>
+              <p style={{ color: 'var(--text-muted)' }}>
+                Complete your profile and log meals to get recommendations!
+              </p>
+            </div>
+          ) : (
+            <div>
+              {/* Calorie Status */}
+              <div style={{ 
+                background: exerciseRecs.caloriesConsumed > exerciseRecs.targetCalories ? '#fff3cd' : '#d4edda',
+                padding: '14px',
+                borderRadius: '8px',
+                marginBottom: '14px',
+                border: `1px solid ${exerciseRecs.caloriesConsumed > exerciseRecs.targetCalories ? '#ffc107' : '#28a745'}`
+              }}>
                 <div style={{ 
-                  background: exerciseRecs.caloriesConsumed > exerciseRecs.targetCalories ? '#fff3cd' : '#d4edda',
-                  padding: '12px',
-                  borderRadius: '8px',
-                  marginBottom: '12px',
-                  border: `1px solid ${exerciseRecs.caloriesConsumed > exerciseRecs.targetCalories ? '#ffc107' : '#28a745'}`
+                  fontSize: '12px', 
+                  color: exerciseRecs.caloriesConsumed > exerciseRecs.targetCalories ? '#856404' : '#155724', 
+                  marginBottom: '6px' 
                 }}>
-                  <div style={{ 
-                    fontSize: '12px', 
-                    color: exerciseRecs.caloriesConsumed > exerciseRecs.targetCalories ? '#856404' : '#155724', 
-                    marginBottom: '6px' 
-                  }}>
-                    {exerciseRecs.caloriesConsumed > exerciseRecs.targetCalories ? 'Need to Burn' : 'Under Target'}
-                  </div>
-                  <div style={{ 
-                    fontSize: '28px', 
-                    fontWeight: 700, 
-                    color: exerciseRecs.caloriesConsumed > exerciseRecs.targetCalories ? '#856404' : '#155724', 
-                    marginBottom: '6px' 
-                  }}>
-                    {Math.abs(exerciseRecs.caloriesConsumed - exerciseRecs.targetCalories)} kcal
-                  </div>
-                  <div style={{ 
-                    fontSize: '11px', 
-                    color: exerciseRecs.caloriesConsumed > exerciseRecs.targetCalories ? '#856404' : '#155724'
-                  }}>
-                    Consumed: {exerciseRecs.caloriesConsumed || 0} kcal
-                  </div>
+                  {exerciseRecs.caloriesConsumed > exerciseRecs.targetCalories ? 'Need to Burn' : 'Under Target'}
                 </div>
-
-                {/* Goal */}
                 <div style={{ 
-                  fontSize: '13px', 
-                  color: '#495057', 
-                  marginBottom: '10px',
-                  fontWeight: 500
+                  fontSize: '28px', 
+                  fontWeight: 700, 
+                  color: exerciseRecs.caloriesConsumed > exerciseRecs.targetCalories ? '#856404' : '#155724', 
+                  marginBottom: '6px' 
                 }}>
-                  🎯 {exerciseRecs.goal}
-                </div>
-
-                {/* Main Message */}
-                <p className="tip-message" style={{ 
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  marginBottom: '12px',
-                  color: exerciseRecs.message.includes('✅') ? '#27ae60' : '#2c3e50'
-                }}>
-                  {exerciseRecs.message}
-                </p>
-
-                {/* Show recommendations button if calories need to be burned */}
-                {exerciseRecs.caloriesConsumed > exerciseRecs.targetCalories && exerciseRecs.recommendations && exerciseRecs.recommendations.length > 0 ? (
-                  <button 
-                    className="btn-primary"
-                    onClick={() => setShowExerciseModal(true)}
-                    style={{ width: '100%', marginBottom: '12px' }}
-                  >
-                    🏃 View Exercise Recommendations
-                  </button>
-                ) : null}
-
-                {/* Exercise Recommendations - Hidden, will show in modal */}
-                <div style={{ display: 'none', gap: '8px' }}>
-                  {exerciseRecs.recommendations.map((rec: any, idx: number) => (
-                    <div 
-                      key={idx}
-                      style={{
-                        background: '#f8f9fa',
-                        border: '1px solid #e9ecef',
-                        padding: '12px',
-                        borderRadius: '8px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span style={{ fontSize: '24px' }}>{rec.icon}</span>
-                        <div>
-                          <div style={{ fontWeight: 600, fontSize: '14px', color: '#2c3e50' }}>
-                            {rec.exercise}
-                          </div>
-                          <div style={{ fontSize: '11px', color: '#6c757d', marginTop: '2px' }}>
-                            {rec.reason}
-                          </div>
-                          {rec.exercises && (
-                            <div style={{ fontSize: '10px', color: '#868e96', marginTop: '2px' }}>
-                              {rec.exercises.join(', ')}
-                            </div>
-                          )}
-                          {rec.stepTarget && (
-                            <div style={{ fontSize: '10px', color: '#868e96', marginTop: '2px' }}>
-                              Target: {rec.stepTarget.toLocaleString()} steps
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: '16px', fontWeight: 700, color: '#495057' }}>
-                          {rec.duration} min
-                        </div>
-                        <div style={{ fontSize: '11px', color: '#6c757d' }}>
-                          ~{rec.calories} kcal
-                        </div>
-                        <div style={{ 
-                          fontSize: '9px', 
-                          color: 'white',
-                          background: rec.intensity === 'Very High' || rec.intensity === 'High' ? '#e74c3c' : 
-                                     rec.intensity === 'Moderate' ? '#f39c12' : '#27ae60',
-                          padding: '2px 6px',
-                          borderRadius: '4px',
-                          marginTop: '4px',
-                          display: 'inline-block'
-                        }}>
-                          {rec.intensity}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                  {Math.abs(exerciseRecs.caloriesConsumed - exerciseRecs.targetCalories)} kcal
                 </div>
               </div>
-            )}
-          </div>
+
+              {/* Goal */}
+              <div style={{ 
+                fontSize: '13px', 
+                color: 'var(--text-soft)', 
+                marginBottom: '10px',
+                fontWeight: 500
+              }}>
+                🎯 {exerciseRecs.goal}
+              </div>
+
+              {/* Main Message */}
+              <p style={{ 
+                fontSize: '14px',
+                fontWeight: 600,
+                marginBottom: '12px',
+                color: exerciseRecs.message.includes('✅') ? '#27ae60' : 'var(--text-main)'
+              }}>
+                {exerciseRecs.message}
+              </p>
+
+              {/* Show recommendations button if calories need to be burned */}
+              {exerciseRecs.caloriesConsumed > exerciseRecs.targetCalories && exerciseRecs.recommendations && exerciseRecs.recommendations.length > 0 ? (
+                <button 
+                  className="btn-primary"
+                  onClick={() => setShowExerciseModal(true)}
+                  style={{ width: '100%' }}
+                >
+                  🏃 View Exercise Recommendations
+                </button>
+              ) : null}
+            </div>
+          )}
         </div>
       </section>
 

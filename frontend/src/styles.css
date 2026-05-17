@@ -1025,6 +1025,18 @@ main {
   color: var(--text-soft);
 }
 
+.tip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tip-message {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .tip-illustration {
   display: flex;
   align-items: center;
