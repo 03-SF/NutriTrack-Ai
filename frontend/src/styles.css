@@ -1772,11 +1772,6 @@ main {
 
 .emoji-dark-grey {
   color: #4b5563 !important;
-  text-shadow: none !important;
-  filter: none !important;
-  opacity: 1 !important;
-  font-weight: inherit;
-  text-decoration: none !important;
 }
 
 .food-entry-card {

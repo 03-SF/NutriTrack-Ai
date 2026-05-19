@@ -379,7 +379,7 @@ export default function NutritionLog({
                 <div className="empty-state">
                   <div style={{ fontSize: '48px', marginBottom: '12px' }}>🍽️</div>
                   <p style={{ fontSize: '16px', fontWeight: '600', color: 'var(--text-main)' }}>No food entries yet today</p>
-                  <p className="empty-subtitle">Click "<span className="emoji-dark-grey" style={{ color: '#4b5563' }}>➕</span> Add Food" to start logging your meals</p>
+                  <p className="empty-subtitle">Click "<span className="emoji-dark-grey">➕</span> Add Food" to start logging your meals</p>
                 </div>
               ) : (
                 foodEntries.map((entry, idx) => (

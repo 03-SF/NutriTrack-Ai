@@ -353,7 +353,7 @@ export default function FitnessLog({ onClose, jwt }: FitnessLogProps) {
                 <div className="empty-state">
                   <div style={{ fontSize: '48px', marginBottom: '12px' }}>🏋️</div>
                   <p style={{ fontSize: '16px', fontWeight: '600', color: 'var(--text-main)' }}>No manual workouts logged today</p>
-                  <p className="empty-subtitle">Click "<span className="emoji-dark-grey" style={{ color: '#4b5563' }}>➕</span> Log Workout" to track your exercises</p>
+                  <p className="empty-subtitle">Click "<span className="emoji-dark-grey">➕</span> Log Workout" to track your exercises</p>
                 </div>
               ) : (
                 workoutEntries.map((entry) => (
