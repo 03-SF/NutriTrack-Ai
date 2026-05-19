@@ -1,4 +1,4 @@
-﻿{
+{
   "version": 2,
   "framework": "vite",
   "buildCommand": "cd frontend && npm install && npm run build",
@@ -13,8 +13,8 @@
   ],
   "functions": {
     "api/index.js": {
-      "maxDuration": 10,
-      "memory": 1024
+      "maxDuration": 60,
+      "memory": 3008
     }
   }
 }
