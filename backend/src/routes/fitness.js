@@ -61,9 +61,9 @@ router.get("/today", requireAuth(), async (req, res, next) => {
       23, 59, 59, 999
     ).getTime();
     
-    // Convert to UTC milliseconds
-    const start = startOfDayLocalMs - (tzOffsetMinutes * 60 * 1000);
-    const end = endOfDayLocalMs - (tzOffsetMinutes * 60 * 1000);
+    // Already in UTC milliseconds from the Date constructor
+    const start = startOfDayLocalMs;
+    const end = endOfDayLocalMs;
     
     console.log(`📊 Fetching TODAY's data (user timezone):`);
     console.log(`   Start (UTC): ${new Date(start).toISOString()}`);

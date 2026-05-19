@@ -56,11 +56,11 @@ app.use(
     credentials: true,
   })
 );
-app.use(cookieParser());
 app.use(express.json());
+app.use(cookieParser(SESSION_SECRET));
 app.use(
   session({
-    secret: SESSION_SECRET,
+    secret: SESSION_SECRET || 'default-secret-key',
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false },

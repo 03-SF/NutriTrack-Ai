@@ -184,17 +184,26 @@ export default function NutritionLog({
     if (!jwt || !confirm("Delete this entry?")) return;
 
     try {
-      const resp = await fetch(`${API_BASE}/api/nutrition/delete/${id}`, {
+      console.log(`🗑️ Attempting to delete entry ${id}...`);
+      const resp = await fetch(`${API_BASE}/api/nutrition/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${jwt}` }
       });
 
+      console.log('Delete response status:', resp.status, resp.statusText);
+
       if (resp.ok) {
         setFoodEntries(foodEntries.filter(e => e._id !== id));
-        window.location.reload();
+        alert("Entry deleted successfully!");
+      } else {
+        const error = await resp.json();
+        alert(`Failed to delete: ${error.message || error.error || 'Unknown error'}`);
+        console.error("Delete failed:", error);
       }
     } catch (e) {
       console.error("Error deleting:", e);
+      const errorMsg = e instanceof Error ? e.message : String(e);
+      alert(`Error deleting entry: ${errorMsg}\n\nMake sure the backend server is running on port 5000`);
     }
   }
 
@@ -238,7 +247,7 @@ export default function NutritionLog({
               <h3>📋 Today's Food ({foodEntries.length} items)</h3>
               <button 
                 className="btn-primary btn-sm" 
-                style={showAddFood ? { background: '#800000', borderColor: '#660000' } : {}}
+                style={showAddFood ? { background: '#86efac', borderColor: '#22c55e' } : {}}
                 onClick={() => {
                   setShowAddFood(!showAddFood);
                   setSelectedFood(null);
@@ -246,7 +255,7 @@ export default function NutritionLog({
                   setSearchQuery("");
                 }}
               >
-                {showAddFood ? "✕ Cancel" : "➕ Add Food"}
+                {showAddFood ? "✕ Cancel" : <span><span className="emoji-dark-grey">➕</span> Add Food</span>}
               </button>
             </div>
 
@@ -370,7 +379,7 @@ export default function NutritionLog({
                 <div className="empty-state">
                   <div style={{ fontSize: '48px', marginBottom: '12px' }}>🍽️</div>
                   <p style={{ fontSize: '16px', fontWeight: '600', color: 'var(--text-main)' }}>No food entries yet today</p>
-                  <p className="empty-subtitle">Click "➕ Add Food" to start logging your meals</p>
+                  <p className="empty-subtitle">Click "<span className="emoji-dark-grey">➕</span> Add Food" to start logging your meals</p>
                 </div>
               ) : (
                 foodEntries.map((entry, idx) => (

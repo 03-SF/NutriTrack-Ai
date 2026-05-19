@@ -60,7 +60,7 @@ router.get("/today", requireAuth(), async (req, res, next) => {
 
     res.json({
       entries: todayEntries.map(e => ({
-        id: e._id,
+        _id: e._id,
         name: e.name,
         calories: e.calories,
         protein: e.protein,

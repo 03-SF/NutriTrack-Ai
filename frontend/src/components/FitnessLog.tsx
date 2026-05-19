@@ -173,7 +173,7 @@ export default function FitnessLog({ onClose, jwt }: FitnessLogProps) {
     if (!jwt || !confirm('Delete this workout entry?')) return;
     
     try {
-      const resp = await fetch(`${API_BASE}/api/workout/delete/${id}`, {
+      const resp = await fetch(`${API_BASE}/api/workout/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${jwt}` }
       });
@@ -248,7 +248,7 @@ export default function FitnessLog({ onClose, jwt }: FitnessLogProps) {
               onClick={() => setShowAddWorkout(!showAddWorkout)}
               style={{ padding: '8px 16px', fontSize: '14px' }}
             >
-              {showAddWorkout ? '❌ Cancel' : '➕ Log Workout'}
+              {showAddWorkout ? '❌ Cancel' : <span><span className="emoji-dark-grey">➕</span> Log Workout</span>}
             </button>
             <button className="btn-close" onClick={onClose}>✕</button>
           </div>
@@ -258,7 +258,7 @@ export default function FitnessLog({ onClose, jwt }: FitnessLogProps) {
           {/* Manual Workout Form */}
           {showAddWorkout && (
             <div className="add-workout-form" style={{ 
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #86efac 0%, #ADD0B3 100%)',
               padding: '20px',
               borderRadius: '12px',
               marginBottom: '20px',
@@ -330,7 +330,7 @@ export default function FitnessLog({ onClose, jwt }: FitnessLogProps) {
                   className="btn-primary"
                   style={{ 
                     background: 'white',
-                    color: '#667eea',
+                    color: '#86efac',
                     padding: '10px',
                     fontWeight: 'bold',
                     marginTop: '5px'
@@ -353,7 +353,7 @@ export default function FitnessLog({ onClose, jwt }: FitnessLogProps) {
                 <div className="empty-state">
                   <div style={{ fontSize: '48px', marginBottom: '12px' }}>🏋️</div>
                   <p style={{ fontSize: '16px', fontWeight: '600', color: 'var(--text-main)' }}>No manual workouts logged today</p>
-                  <p className="empty-subtitle">Click "➕ Log Workout" to track your exercises</p>
+                  <p className="empty-subtitle">Click "<span className="emoji-dark-grey">➕</span> Log Workout" to track your exercises</p>
                 </div>
               ) : (
                 workoutEntries.map((entry) => (
@@ -476,8 +476,8 @@ export default function FitnessLog({ onClose, jwt }: FitnessLogProps) {
                   <AreaChart data={weeklyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorMetric" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.8} />
-                        <stop offset="95%" stopColor="#7c3aed" stopOpacity={0} />
+                        <stop offset="5%" stopColor="#86efac" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="#86efac" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(189,195,200,0.3)" />
@@ -501,7 +501,7 @@ export default function FitnessLog({ onClose, jwt }: FitnessLogProps) {
                     <Area
                       type="monotone"
                       dataKey={selectedMetric}
-                      stroke="#7c3aed"
+                      stroke="#22c55e"
                       strokeWidth={2}
                       fillOpacity={1}
                       fill="url(#colorMetric)"
@@ -558,9 +558,9 @@ export default function FitnessLog({ onClose, jwt }: FitnessLogProps) {
                       }}
                     />
                     <Legend />
-                    <Bar dataKey="steps" fill="#7c3aed" name="Steps" />
-                    <Bar dataKey="calories" fill="#a78bfa" name="Calories" />
-                    <Bar dataKey="heartPoints" fill="#8b5cf6" name="Heart Points" />
+                    <Bar dataKey="steps" fill="#86efac" name="Steps" />
+                    <Bar dataKey="calories" fill="#ADD0B3" name="Calories" />
+                    <Bar dataKey="heartPoints" fill="#22c55e" name="Heart Points" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

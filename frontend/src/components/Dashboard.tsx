@@ -553,8 +553,8 @@ export default function Dashboard({ openModal, onModalClose, onSyncTimeUpdate }:
             onClick={() => setShowNutritionLog(true)}
             style={{ 
               padding: '24px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              borderRadius: '16px',
+              background: 'linear-gradient(135deg, #6ee7b7 0%, #34d399 100%)',
+              borderRadius: '8px',
               color: 'white',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
@@ -574,8 +574,8 @@ export default function Dashboard({ openModal, onModalClose, onSyncTimeUpdate }:
             onClick={() => setShowFitnessLog(true)}
             style={{ 
               padding: '24px',
-              background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
-              borderRadius: '16px',
+              background: 'linear-gradient(135deg, #34d399 0%, #059669 100%)',
+              borderRadius: '8px',
               color: 'white',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
@@ -599,8 +599,8 @@ export default function Dashboard({ openModal, onModalClose, onSyncTimeUpdate }:
         <div style={{ 
           marginBottom: '1.5rem', 
           padding: '24px', 
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
-          borderRadius: '16px', 
+          background: 'linear-gradient(135deg, #6ee7b7 0%, #34d399 100%)', 
+          borderRadius: '8px', 
           color: 'white',
           display: 'flex',
           justifyContent: 'space-between',
@@ -608,49 +608,13 @@ export default function Dashboard({ openModal, onModalClose, onSyncTimeUpdate }:
         }}>
           <div>
             <h2 style={{ margin: '0 0 8px 0', fontSize: '1.5rem' }}>
-              Welcome back, {userInfo.name}! 👋
+              Welcome back, {userInfo.name}! 
             </h2>
             <p style={{ margin: 0, opacity: 0.95, fontSize: '14px' }}>
               You're on a {loginStreak}-day streak. Today's goal is to maintain your net calorie balance while focusing on heart health.
             </p>
           </div>
           <div style={{ display: 'flex', gap: '12px', flexDirection: 'column', alignItems: 'flex-end' }}>
-            <button
-              onClick={() => setShowNutritionLog(true)}
-              style={{
-                padding: '8px 16px',
-                background: 'rgba(255,255,255,0.25)',
-                border: '1px solid rgba(255,255,255,0.5)',
-                color: 'white',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontSize: '13px',
-                fontWeight: 600,
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.35)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.25)';
-              }}
-            >
-              Log Morning Meal
-            </button>
-            <button
-              onClick={() => setShowSettings(true)}
-              style={{
-                padding: 0,
-                background: 'none',
-                border: 'none',
-                color: 'white',
-                cursor: 'pointer',
-                fontSize: '13px',
-                textDecoration: 'underline',
-              }}
-            >
-              View Schedule
-            </button>
           </div>
         </div>
       )}

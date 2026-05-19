@@ -11,7 +11,7 @@ export default function Sidebar({ open, onLogout, onNavigate, dailyGoal = 2200, 
     <aside id="sidebar" className={`sidebar ${open ? "open" : ""}`}>
       <div className="sidebar-header">
         <div className="logo-mark" style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #16a34a 100%)',
+          background: 'linear-gradient(135deg, #86efac 0%, #16a34a 100%)',
           color: 'white',
           display: 'flex',
           alignItems: 'center',
@@ -31,12 +31,12 @@ export default function Sidebar({ open, onLogout, onNavigate, dailyGoal = 2200, 
           type="button"
           onClick={() => onNavigate?.('dashboard')}
           style={{
-            background: 'rgba(102, 126, 234, 0.1)',
+            background: 'rgba(134, 239, 172, 0.1)',
             borderRadius: '20px',
             position: 'relative'
           }}
         >
-          <span className="icon">📊</span>
+          <span className="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></span>
           <span className="label">Dashboard</span>
         </button>
         <button 
@@ -44,7 +44,7 @@ export default function Sidebar({ open, onLogout, onNavigate, dailyGoal = 2200, 
           type="button"
           onClick={() => onNavigate?.('nutrition')}
         >
-          <span className="icon">🥬</span>
+          <span className="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path><circle cx="12" cy="12" r="8" fill="none"></circle></svg></span>
           <span className="label">Nutrition Log</span>
         </button>
         <button 
@@ -52,7 +52,7 @@ export default function Sidebar({ open, onLogout, onNavigate, dailyGoal = 2200, 
           type="button"
           onClick={() => onNavigate?.('fitness')}
         >
-          <span className="icon">⛹️</span>
+          <span className="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 4h2v16H6zM16 4h2v16h-2z"></path><rect x="9" y="6" width="6" height="12" rx="1"></rect></svg></span>
           <span className="label">Fitness Log</span>
         </button>
         <button 
@@ -60,7 +60,7 @@ export default function Sidebar({ open, onLogout, onNavigate, dailyGoal = 2200, 
           type="button"
           onClick={() => onNavigate?.('ai-insights')}
         >
-          <span className="icon">🧠</span>
+          <span className="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="9" cy="10" r="1"></circle><circle cx="12" cy="10" r="1"></circle><circle cx="15" cy="10" r="1"></circle></svg></span>
           <span className="label">AI Insights</span>
         </button>
       </nav>
@@ -72,12 +72,12 @@ export default function Sidebar({ open, onLogout, onNavigate, dailyGoal = 2200, 
           type="button"
           onClick={() => onNavigate?.('settings')}
         >
-          <span className="icon">⚙️</span>
+          <span className="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"></path></svg></span>
           <span className="label">Settings</span>
         </button>
         {onLogout && (
           <button className="nav-item" type="button" onClick={onLogout}>
-            <span className="icon">🚪</span>
+            <span className="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path></svg></span>
             <span className="label">Logout</span>
           </button>
         )}

@@ -24,11 +24,11 @@ type Props = {
   nutritionHistory: any[];
 };
 
-// Switched to purple palette:
-// primary purple: #7c3aed
-// lighter purple:  #a78bfa
-// vivid purple:    #8b5cf6
-const MACRO_COLORS = ["#7c3aed", "#a78bfa", "#8b5cf6"];
+// Switched to green palette:
+// primary green: #86efac
+// secondary green: #ADD0B3
+// darker green: #22c55e
+const MACRO_COLORS = ["#86efac", "#ADD0B3", "#22c55e"];
 
 export default function Charts({
   dailyGoal,
@@ -140,8 +140,8 @@ export default function Charts({
             <AreaChart data={weeklyData} margin={{ top: 10, right: 24, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorActual" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.6} />
-                  <stop offset="95%" stopColor="#7c3aed" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#86efac" stopOpacity={0.6} />
+                  <stop offset="95%" stopColor="#86efac" stopOpacity={0} />
                 </linearGradient>
               </defs>
 
@@ -182,14 +182,14 @@ export default function Charts({
               <Area
                 type="monotone"
                 dataKey="actual"
-                stroke="#6d28d9"
+                stroke="#22c55e"
                 strokeWidth={2}
                 fill="url(#colorActual)"
                 dot={{
                   r: 4,
                   strokeWidth: 2,
                   stroke: "#ffffff",
-                  fill: "#7c3aed",
+                  fill: "#86efac",
                 }}
                 activeDot={{ r: 6 }}
               />
@@ -199,7 +199,7 @@ export default function Charts({
 
           <div className="chart-legend">
             <div className="legend-item">
-              <span className="legend-dot" style={{ backgroundColor: "#7c3aed" }} />
+              <span className="legend-dot" style={{ backgroundColor: "#86efac" }} />
               <span>Actual intake</span>
             </div>
             <div className="legend-item">
