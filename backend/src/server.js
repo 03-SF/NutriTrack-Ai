@@ -45,8 +45,8 @@ async function startServer() {
     
     // Then start the HTTP server
     await new Promise((resolve, reject) => {
-      httpServer.listen(PORT, () => {
-        console.log(`🚀 Server running on http://localhost:${PORT}`);
+      httpServer.listen(PORT, "0.0.0.0", () => {
+        console.log(`🚀 Server running on http://0.0.0.0:${PORT}`);
         console.log(`🔗 OAuth Redirect URL: ${BASE_URL}/api/auth/google/callback`);
         console.log(`📡 Server is ready to accept connections`);
         resolve();

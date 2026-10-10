@@ -20,6 +20,7 @@ import streaksRoutes from "./routes/streaks.js";
 // Utilities
 import User from "./models/User.js";
 import { fetchDirectSteps } from "./googleFitDirect.js";
+import jwt from "jsonwebtoken";
 
 dotenv.config();
 
@@ -28,6 +29,10 @@ const {
   FRONTEND_URL,
   SESSION_SECRET,
 } = process.env;
+
+if (process.env.NODE_ENV === "production" && !SESSION_SECRET) {
+  throw new Error("SESSION_SECRET must be configured in production");
+}
 
 // ================== MIDDLEWARE ==================
 const allowedOrigins = [
@@ -60,10 +65,20 @@ app.use(express.json());
 app.use(cookieParser(SESSION_SECRET));
 app.use(
   session({
-    secret: SESSION_SECRET || 'default-secret-key',
+    secret: SESSION_SECRET || "development-only-session-secret",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false },
+    cookie: {
+      httpOnly: true,
+      secure:
+        process.env.NODE_ENV === "production" ||
+        FRONTEND_URL?.startsWith("https://"),
+      sameSite:
+        process.env.NODE_ENV === "production" ||
+        FRONTEND_URL?.startsWith("https://")
+          ? "none"
+          : "lax",
+    },
   })
 );
 
@@ -72,6 +87,7 @@ app.get("/ping", (req, res) => res.json({ msg: "pong" }));
 
 // ================== DEBUG ROUTES (Development only) ==================
 
+if (process.env.NODE_ENV !== "production") {
 app.get("/api/debug/verify-jwt", (req, res) => {
   const auth = req.headers.authorization;
   if (!auth || !auth.startsWith("Bearer ")) {
@@ -80,7 +96,6 @@ app.get("/api/debug/verify-jwt", (req, res) => {
   
   const token = auth.split(" ")[1];
   try {
-    const jwt = require("jsonwebtoken");
     const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
     return res.json({ 
       valid: true, 
@@ -162,6 +177,7 @@ app.get("/api/debug/googlefit-test", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+}
 
 // ================== ROUTES (Modularized) ==================
 
